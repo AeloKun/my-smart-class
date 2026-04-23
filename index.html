@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartClass 课堂助手</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="nav" role="navigation" aria-label="功能切换">
+      <div class="nav__brand">
+        <span class="nav__logo" aria-hidden="true">
+          <i data-lucide="graduation-cap"></i>
+        </span>
+        <span class="nav__title">SmartClass</span>
+      </div>
+      <nav class="nav__tabs">
+        <button type="button" class="nav__btn nav__btn--active" data-view="scoreboard" aria-current="page">
+          <span class="nav__btn-icon" aria-hidden="true"><i data-lucide="layout-grid"></i></span>
+          <span class="nav__btn-label">计分板</span>
+        </button>
+        <button type="button" class="nav__btn" data-view="picker">
+          <span class="nav__btn-icon" aria-hidden="true"><i data-lucide="user-search"></i></span>
+          <span class="nav__btn-label">点名器</span>
+        </button>
+        <button type="button" class="nav__btn" data-view="timer">
+          <span class="nav__btn-icon" aria-hidden="true"><i data-lucide="timer"></i></span>
+          <span class="nav__btn-label">计时器</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <section id="view-scoreboard" class="view view--active" aria-labelledby="scoreboard-heading">
+        <header class="view__header">
+          <h1 id="scoreboard-heading" class="view__title">小组计分板</h1>
+          <p class="view__desc">单击 ± 调整分数，双击组名可修改</p>
+        </header>
+        <div id="scoreboard-grid" class="scoreboard-grid" role="list"></div>
+      </section>
+
+      <section id="view-picker" class="view" hidden aria-labelledby="picker-heading">
+        <header class="view__header">
+          <h1 id="picker-heading" class="view__title">随机点名</h1>
+          <p class="view__desc">粘贴名单（每行一人或逗号分隔），点击开始抽签</p>
+        </header>
+        <div class="picker">
+          <label class="picker__label" for="picker-input">学生名单</label>
+          <textarea id="picker-input" class="picker__input" rows="8" placeholder="张三&#10;李四&#10;王五"></textarea>
+          <div class="picker__actions">
+            <button type="button" id="picker-start" class="btn btn--primary btn--lg">
+              <i data-lucide="shuffle" class="btn__icon" aria-hidden="true"></i>
+              开始抽签
+            </button>
+          </div>
+          <div id="picker-display" class="picker__display" aria-live="polite" aria-atomic="true">
+            <span class="picker__placeholder">结果将显示在这里</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-timer" class="view" hidden aria-labelledby="timer-heading">
+        <header class="view__header">
+          <h1 id="timer-heading" class="view__title">课堂计时</h1>
+          <p class="view__desc">圆形进度、暂停与常用时长</p>
+        </header>
+        <div class="timer">
+          <div class="timer__ring-wrap">
+            <svg class="timer__svg" viewBox="0 0 200 200" aria-hidden="true">
+              <circle class="timer__track" cx="100" cy="100" r="88" fill="none" stroke-width="12" />
+              <circle id="timer-progress" class="timer__progress" cx="100" cy="100" r="88" fill="none" stroke-width="12" stroke-linecap="round" transform="rotate(-90 100 100)" />
+            </svg>
+            <div class="timer__center">
+              <span id="timer-readout" class="timer__readout">05:00</span>
+              <span class="timer__sub">剩余时间</span>
+            </div>
+          </div>
+          <div class="timer__presets" role="group" aria-label="预设时长">
+            <button type="button" class="btn btn--ghost timer-preset" data-seconds="60">1 分</button>
+            <button type="button" class="btn btn--ghost timer-preset" data-seconds="180">3 分</button>
+            <button type="button" class="btn btn--ghost timer-preset" data-seconds="300">5 分</button>
+            <button type="button" class="btn btn--ghost timer-preset" data-seconds="600">10 分</button>
+            <button type="button" class="btn btn--ghost timer-preset" data-seconds="900">15 分</button>
+          </div>
+          <div class="timer__controls">
+            <button type="button" id="timer-toggle" class="btn btn--primary btn--icon-lg" aria-pressed="false" aria-label="开始计时">
+              <i data-lucide="play" id="timer-toggle-icon" aria-hidden="true"></i>
+            </button>
+            <button type="button" id="timer-reset" class="btn btn--secondary btn--icon-lg" aria-label="重置计时器">
+              <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
