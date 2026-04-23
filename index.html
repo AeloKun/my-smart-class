@@ -43,6 +43,16 @@
         <header class="view__header">
           <h1 id="scoreboard-heading" class="view__title">小组计分板</h1>
           <p class="view__desc">单击 ± 调整分数，双击组名可修改</p>
+          <div class="scoreboard-tools" role="group" aria-label="小组数量设置">
+            <span class="scoreboard-tools__label">小组数量</span>
+            <button type="button" id="group-count-minus" class="btn btn--ghost btn--icon-lg" aria-label="减少小组数量">
+              <i data-lucide="minus" aria-hidden="true"></i>
+            </button>
+            <output id="group-count-value" class="scoreboard-tools__value" aria-live="polite">6</output>
+            <button type="button" id="group-count-plus" class="btn btn--ghost btn--icon-lg" aria-label="增加小组数量">
+              <i data-lucide="plus" aria-hidden="true"></i>
+            </button>
+          </div>
         </header>
         <div id="scoreboard-grid" class="scoreboard-grid" role="list"></div>
       </section>

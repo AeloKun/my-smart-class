@@ -7,6 +7,8 @@
 
   var STORAGE_KEY = "smart_class_data";
   var ONBOARDING_KEY = "smart_class_onboarding_seen";
+  var MIN_GROUPS = 2;
+  var MAX_GROUPS = 10;
   var TIMER_RADIUS = 88;
   var CIRC = 2 * Math.PI * TIMER_RADIUS;
 
@@ -25,15 +27,19 @@
 
   // —— Storage ——
   var Storage = {
+    makeGroup: function (index) {
+      return {
+        id: "g" + (index + 1) + "-" + Date.now() + "-" + Math.floor(Math.random() * 1000),
+        name: "第" + (index + 1) + "组",
+        score: 0,
+      };
+    },
+
     defaultData: function () {
       var groups = [];
       var i;
       for (i = 1; i <= 6; i++) {
-        groups.push({
-          id: "g" + i + "-" + Date.now(),
-          name: "第" + i + "组",
-          score: 0,
-        });
+        groups.push(this.makeGroup(i - 1));
       }
       return {
         version: 1,
@@ -52,15 +58,13 @@
         if (!data || !Array.isArray(data.groups) || data.groups.length === 0) {
           return this.defaultData();
         }
-        while (data.groups.length < 4) {
-          data.groups.push({
-            id: "g-extra-" + data.groups.length + "-" + Date.now(),
-            name: "第" + (data.groups.length + 1) + "组",
-            score: 0,
-          });
+        if (data.groups.length < MIN_GROUPS) {
+          while (data.groups.length < MIN_GROUPS) {
+            data.groups.push(this.makeGroup(data.groups.length));
+          }
         }
-        if (data.groups.length > 6) {
-          data.groups = data.groups.slice(0, 6);
+        if (data.groups.length > MAX_GROUPS) {
+          data.groups = data.groups.slice(0, MAX_GROUPS);
         }
         if (typeof data.pickerListRaw !== "string") {
           data.pickerListRaw = "";
@@ -70,7 +74,7 @@
             id:
               typeof g.id === "string" && g.id
                 ? g.id
-                : "g-restored-" + idx + "-" + Date.now(),
+                : "g-restored-" + idx + "-" + Date.now() + "-" + Math.floor(Math.random() * 1000),
             name:
               typeof g.name === "string" && g.name.trim()
                 ? g.name.trim()
@@ -140,14 +144,60 @@
   // —— Scoreboard ——
   var Scoreboard = {
     grid: null,
+    countValueEl: null,
+    minusBtn: null,
+    plusBtn: null,
 
     init: function () {
       this.grid = document.getElementById("scoreboard-grid");
+      this.countValueEl = document.getElementById("group-count-value");
+      this.minusBtn = document.getElementById("group-count-minus");
+      this.plusBtn = document.getElementById("group-count-plus");
+      this.bindControls();
       this.render();
     },
 
     persist: function () {
       if (appData) Storage.save(appData);
+    },
+
+    bindControls: function () {
+      var self = this;
+      if (this.minusBtn) {
+        this.minusBtn.addEventListener("click", function () {
+          self.changeGroupCount(-1);
+        });
+      }
+      if (this.plusBtn) {
+        this.plusBtn.addEventListener("click", function () {
+          self.changeGroupCount(1);
+        });
+      }
+    },
+
+    changeGroupCount: function (delta) {
+      if (!appData || !Array.isArray(appData.groups)) return;
+      var current = appData.groups.length;
+      var target = current + delta;
+      if (target < MIN_GROUPS || target > MAX_GROUPS) return;
+
+      if (target > current) {
+        while (appData.groups.length < target) {
+          appData.groups.push(Storage.makeGroup(appData.groups.length));
+        }
+      } else if (target < current) {
+        appData.groups = appData.groups.slice(0, target);
+      }
+      this.persist();
+      this.render();
+    },
+
+    updateCountUi: function () {
+      if (!appData || !Array.isArray(appData.groups)) return;
+      var count = appData.groups.length;
+      if (this.countValueEl) this.countValueEl.textContent = String(count);
+      if (this.minusBtn) this.minusBtn.disabled = count <= MIN_GROUPS;
+      if (this.plusBtn) this.plusBtn.disabled = count >= MAX_GROUPS;
     },
 
     render: function () {
@@ -232,6 +282,7 @@
         card.appendChild(scoreRow);
         self.grid.appendChild(card);
       });
+      this.updateCountUi();
     },
   };
 
