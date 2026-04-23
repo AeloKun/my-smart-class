@@ -587,6 +587,10 @@ button {
   overflow: hidden;
 }
 
+.overlay__panel--help {
+  width: min(860px, calc(100vw - 2rem));
+}
+
 .overlay__header {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -673,4 +677,51 @@ button {
 /* Make primary onboarding button pop a bit */
 #onboarding-next.btn--primary:hover {
   transform: scale(1.02);
+}
+
+/* —— Help content —— */
+.help-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.help-list__item {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 0.75rem;
+  padding: 0.9rem 0.9rem;
+  border-radius: var(--radius);
+  border: 1px solid rgb(226 232 240 / 70%);
+  background: rgb(248 250 252 / 70%);
+}
+
+.help-list__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(99 102 241 / 12%);
+  color: var(--primary);
+}
+
+.help-list__icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.help-list__title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 0.1rem;
+}
+
+.help-list__desc {
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
 }

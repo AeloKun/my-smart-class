@@ -524,7 +524,7 @@
       {
         icon: "dice-5",
         title: "🎲 公平随机抽签",
-        desc: "在下方输入学生名单。点击开始，系统将为您公平选出回答问题的幸运儿。配合内置计时器，让课堂节奏尽在掌握。",
+        desc: "在下方输入学生名单。点击开始，系统将为您公平选出回答问题的幸运儿。配合内置计时器，让课堂节奏尽在掌握。（提示：右上角“帮助”里有学期维度的使用价值）",
       },
     ],
 
@@ -644,6 +644,54 @@
     },
   };
 
+  // —— Help ——
+  var Help = {
+    overlay: null,
+    openBtn: null,
+
+    init: function () {
+      this.overlay = document.getElementById("help-overlay");
+      this.openBtn = document.getElementById("help-open");
+      if (!this.overlay) return;
+
+      var self = this;
+      if (this.openBtn) {
+        this.openBtn.addEventListener("click", function () {
+          self.open();
+        });
+      }
+      this.overlay.querySelectorAll("[data-help-close]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          self.close();
+        });
+      });
+
+      window.addEventListener("keydown", function (ev) {
+        if (!self.isOpen()) return;
+        if (ev.key === "Escape") self.close();
+      });
+    },
+
+    isOpen: function () {
+      return this.overlay && !this.overlay.hidden;
+    },
+
+    open: function () {
+      if (!this.overlay) return;
+      this.overlay.hidden = false;
+      document.body.style.overflow = "hidden";
+      refreshIcons();
+      var closeBtn = this.overlay.querySelector("[data-help-close]");
+      if (closeBtn && closeBtn.focus) closeBtn.focus();
+    },
+
+    close: function () {
+      if (!this.overlay) return;
+      this.overlay.hidden = true;
+      document.body.style.overflow = "";
+    },
+  };
+
   function onLoad() {
     appData = Storage.load();
     Nav.init();
@@ -652,6 +700,7 @@
     Timer.init();
     Nav.show("scoreboard");
     Onboarding.init();
+    Help.init();
     refreshIcons();
     Onboarding.openIfNeeded();
   }

@@ -31,6 +31,10 @@
           <span class="nav__btn-icon" aria-hidden="true"><i data-lucide="timer"></i></span>
           <span class="nav__btn-label">计时器</span>
         </button>
+        <button type="button" class="nav__btn" id="help-open">
+          <span class="nav__btn-icon" aria-hidden="true"><i data-lucide="help-circle"></i></span>
+          <span class="nav__btn-label">帮助</span>
+        </button>
       </nav>
     </aside>
 
@@ -129,6 +133,55 @@
         <div class="overlay__footer-right">
           <button type="button" class="btn btn--secondary" id="onboarding-back" disabled>上一步</button>
           <button type="button" class="btn btn--primary" id="onboarding-next">下一步</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Help Overlay (long-term value) -->
+  <div id="help-overlay" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="overlay__backdrop" data-help-close></div>
+    <div class="overlay__panel overlay__panel--help" role="document">
+      <header class="overlay__header">
+        <div class="overlay__badge" aria-hidden="true">
+          <i data-lucide="book-open"></i>
+        </div>
+        <div class="overlay__headings">
+          <h2 id="help-title" class="overlay__title">长期保存（如一个学期）的额外帮助</h2>
+          <p class="overlay__desc">SmartClass 会把积分与名单保存在本地浏览器（LocalStorage），便于长期追踪与复盘。</p>
+        </div>
+        <button type="button" class="overlay__close btn btn--secondary btn--icon-lg" aria-label="关闭帮助" data-help-close>
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+      </header>
+      <div class="overlay__body">
+        <ul class="help-list">
+          <li class="help-list__item">
+            <div class="help-list__icon" aria-hidden="true"><i data-lucide="trophy"></i></div>
+            <div class="help-list__content">
+              <div class="help-list__title">过程性评价依据</div>
+              <div class="help-list__desc">这些数据可以作为期末“平时成绩”的直接参考。老师能看到哪个小组整个学期表现更稳定，而不是仅凭期末考试定论。</div>
+            </div>
+          </li>
+          <li class="help-list__item">
+            <div class="help-list__icon" aria-hidden="true"><i data-lucide="activity"></i></div>
+            <div class="help-list__content">
+              <div class="help-list__title">学情分析</div>
+              <div class="help-list__desc">通过长期的积分趋势，老师可以发现哪些学生或小组近期积极性下降，从而及时进行教学干预。</div>
+            </div>
+          </li>
+          <li class="help-list__item">
+            <div class="help-list__icon" aria-hidden="true"><i data-lucide="file-text"></i></div>
+            <div class="help-list__content">
+              <div class="help-list__title">自动化报告生成（可拓展）</div>
+              <div class="help-list__desc">未来可基于这些持久化数据，一键生成学期课堂表现报告，用于家长会沟通或教学总结。</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <footer class="overlay__footer">
+        <div class="overlay__footer-right">
+          <button type="button" class="btn btn--primary" data-help-close>我知道了</button>
         </div>
       </footer>
     </div>
