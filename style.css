@@ -557,3 +557,120 @@ button {
   gap: 1rem;
   align-items: center;
 }
+
+/* —— Onboarding Overlay —— */
+.overlay[hidden] {
+  display: none !important;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+}
+
+.overlay__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(15 23 42 / 40%);
+  backdrop-filter: blur(10px);
+}
+
+.overlay__panel {
+  position: relative;
+  width: min(720px, calc(100vw - 2rem));
+  margin: 8vh auto;
+  background: rgb(255 255 255 / 88%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 35px rgb(15 23 42 / 16%);
+  overflow: hidden;
+}
+
+.overlay__header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 0.75rem;
+  padding: 1.25rem 1.25rem 1rem;
+  background: linear-gradient(180deg, rgb(99 102 241 / 10%), rgb(99 102 241 / 0%));
+}
+
+.overlay__badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(99 102 241 / 14%);
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.overlay__badge svg {
+  width: 24px;
+  height: 24px;
+}
+
+.overlay__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.overlay__desc {
+  margin: 0.35rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.overlay__close {
+  justify-self: end;
+}
+
+.overlay__body {
+  padding: 0.25rem 1.25rem 1.25rem;
+}
+
+.overlay__dots {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  justify-content: center;
+  padding-top: 0.75rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgb(100 116 139 / 30%);
+}
+
+.dot--active {
+  width: 22px;
+  background: rgb(99 102 241 / 70%);
+}
+
+.overlay__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem 1.25rem;
+  border-top: 1px solid rgb(226 232 240 / 70%);
+  background: rgb(248 250 252 / 75%);
+}
+
+.overlay__footer-right {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Make primary onboarding button pop a bit */
+#onboarding-next.btn--primary:hover {
+  transform: scale(1.02);
+}

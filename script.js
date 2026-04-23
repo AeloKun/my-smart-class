@@ -6,6 +6,7 @@
   "use strict";
 
   var STORAGE_KEY = "smart_class_data";
+  var ONBOARDING_KEY = "smart_class_onboarding_seen";
   var TIMER_RADIUS = 88;
   var CIRC = 2 * Math.PI * TIMER_RADIUS;
 
@@ -499,6 +500,150 @@
     },
   };
 
+  // —— Onboarding ——
+  var Onboarding = {
+    overlay: null,
+    titleEl: null,
+    descEl: null,
+    iconEl: null,
+    btnNext: null,
+    btnBack: null,
+    btnSkip: null,
+    step: 0,
+    steps: [
+      {
+        icon: "sparkles",
+        title: "💡 欢迎使用 SmartClass！",
+        desc: "您的全能课堂数字化助手已就绪。让我们花 30 秒了解如何通过它提升课堂效率。",
+      },
+      {
+        icon: "trophy",
+        title: "🏆 实时小组竞赛",
+        desc: "在上方计分板为表现优秀的小组加分。别担心，所有分数都会自动保存，即使关闭网页，下次上课依然能看到成绩。",
+      },
+      {
+        icon: "dice-5",
+        title: "🎲 公平随机抽签",
+        desc: "在下方输入学生名单。点击开始，系统将为您公平选出回答问题的幸运儿。配合内置计时器，让课堂节奏尽在掌握。",
+      },
+    ],
+
+    init: function () {
+      this.overlay = document.getElementById("onboarding-overlay");
+      this.titleEl = document.getElementById("onboarding-title");
+      this.descEl = document.getElementById("onboarding-desc");
+      this.iconEl = document.getElementById("onboarding-icon");
+      this.btnNext = document.getElementById("onboarding-next");
+      this.btnBack = document.getElementById("onboarding-back");
+      this.btnSkip = document.getElementById("onboarding-skip");
+
+      if (!this.overlay || !this.titleEl || !this.descEl || !this.iconEl) return;
+
+      var self = this;
+      this.overlay.querySelectorAll("[data-onboarding-close]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          self.close(true);
+        });
+      });
+
+      if (this.btnNext) {
+        this.btnNext.addEventListener("click", function () {
+          self.next();
+        });
+      }
+      if (this.btnBack) {
+        this.btnBack.addEventListener("click", function () {
+          self.back();
+        });
+      }
+      if (this.btnSkip) {
+        this.btnSkip.addEventListener("click", function () {
+          self.close(true);
+        });
+      }
+
+      window.addEventListener("keydown", function (ev) {
+        if (!self.isOpen()) return;
+        if (ev.key === "Escape") self.close(true);
+      });
+    },
+
+    isOpen: function () {
+      return this.overlay && !this.overlay.hidden;
+    },
+
+    markSeen: function () {
+      try {
+        localStorage.setItem(ONBOARDING_KEY, "1");
+      } catch (e) {}
+    },
+
+    shouldShow: function () {
+      try {
+        return localStorage.getItem(ONBOARDING_KEY) !== "1";
+      } catch (e) {
+        return true;
+      }
+    },
+
+    openIfNeeded: function () {
+      if (!this.overlay) return;
+      if (!this.shouldShow()) return;
+      this.step = 0;
+      this.render();
+      this.overlay.hidden = false;
+      document.body.style.overflow = "hidden";
+      refreshIcons();
+      var firstFocusable = this.btnNext || this.btnSkip;
+      if (firstFocusable && firstFocusable.focus) firstFocusable.focus();
+    },
+
+    close: function (markSeen) {
+      if (!this.overlay) return;
+      this.overlay.hidden = true;
+      document.body.style.overflow = "";
+      if (markSeen) this.markSeen();
+    },
+
+    setDots: function () {
+      if (!this.overlay) return;
+      this.overlay.querySelectorAll("[data-dot]").forEach(function (d) {
+        var idx = parseInt(d.getAttribute("data-dot"), 10);
+        d.classList.toggle("dot--active", idx === Onboarding.step);
+      });
+    },
+
+    render: function () {
+      var s = this.steps[this.step];
+      if (!s) return;
+      this.titleEl.textContent = s.title;
+      this.descEl.textContent = s.desc;
+      this.iconEl.setAttribute("data-lucide", s.icon);
+      this.setDots();
+
+      if (this.btnBack) this.btnBack.disabled = this.step === 0;
+      if (this.btnNext) {
+        this.btnNext.textContent = this.step === this.steps.length - 1 ? "开始使用" : "下一步";
+      }
+      refreshIcons();
+    },
+
+    next: function () {
+      if (this.step >= this.steps.length - 1) {
+        this.close(true);
+        return;
+      }
+      this.step += 1;
+      this.render();
+    },
+
+    back: function () {
+      if (this.step <= 0) return;
+      this.step -= 1;
+      this.render();
+    },
+  };
+
   function onLoad() {
     appData = Storage.load();
     Nav.init();
@@ -506,7 +651,9 @@
     Picker.init();
     Timer.init();
     Nav.show("scoreboard");
+    Onboarding.init();
     refreshIcons();
+    Onboarding.openIfNeeded();
   }
 
   if (document.readyState === "complete") {

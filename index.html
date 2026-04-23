@@ -99,6 +99,41 @@
     </main>
   </div>
 
+  <!-- Onboarding / Welcome Overlay (first visit) -->
+  <div id="onboarding-overlay" class="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onboarding-title" aria-describedby="onboarding-desc">
+    <div class="overlay__backdrop" data-onboarding-close></div>
+    <div class="overlay__panel" role="document">
+      <header class="overlay__header">
+        <div class="overlay__badge" aria-hidden="true">
+          <i id="onboarding-icon" data-lucide="sparkles"></i>
+        </div>
+        <div class="overlay__headings">
+          <h2 id="onboarding-title" class="overlay__title">欢迎使用 SmartClass！</h2>
+          <p id="onboarding-desc" class="overlay__desc">您的全能课堂数字化助手已就绪。让我们花 30 秒了解如何通过它提升课堂效率。</p>
+        </div>
+        <button type="button" class="overlay__close btn btn--secondary btn--icon-lg" aria-label="关闭引导" data-onboarding-close>
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="overlay__body">
+        <div class="overlay__dots" aria-label="引导进度">
+          <span class="dot dot--active" data-dot="0"></span>
+          <span class="dot" data-dot="1"></span>
+          <span class="dot" data-dot="2"></span>
+        </div>
+      </div>
+
+      <footer class="overlay__footer">
+        <button type="button" class="btn btn--ghost" id="onboarding-skip">跳过</button>
+        <div class="overlay__footer-right">
+          <button type="button" class="btn btn--secondary" id="onboarding-back" disabled>上一步</button>
+          <button type="button" class="btn btn--primary" id="onboarding-next">下一步</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <script src="script.js"></script>
